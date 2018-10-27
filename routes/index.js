@@ -1,5 +1,5 @@
 var express = require('express');
-const { create} = require('./controller')
+const { createObject, createReservation, deleteReservation} = require('./controller')
 var router = express.Router();
 
 /* GET home page. */
@@ -9,6 +9,10 @@ var router = express.Router();
 router.post('/', function(req, res, next) {
   res.render('index', {title: 'TEST'});
 });
-router.get('/addobject', create)
+
+router.post('/addobject', createObject)
+router.post('/addreservation', createReservation)
+router.delete('/:id', deleteReservation)
+
 
 module.exports = router;
