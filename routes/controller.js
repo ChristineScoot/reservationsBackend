@@ -1,7 +1,9 @@
 const { success } = require('../services/response/')
 const create = ({ body }, res, next) => {
     console.log("Jakies cos")
-    success(res)
+
+    //TODO zmienic na poprawny "return"
+    res.render('index', {title: 'TEST'});
     // success(res)
 
     // Author.create(body)
