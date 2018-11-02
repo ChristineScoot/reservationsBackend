@@ -27,6 +27,44 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+// var MongoClient = require('mongodb').MongoClient;
+// var uri = "mongodb://kingarojk:kinga2103!@cluster0-shard-00-00-5ndv1.mongodb.net:27017,cluster0-shard-00-01-5ndv1.mongodb.net:27017,cluster0-shard-00-02-5ndv1.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true";
+// MongoClient.connect(uri, function(err, client) {
+//     if(err){
+//         console.log('Error occurred while connecting to mongodb atlas.. \n', err);
+//     }
+//     console.log('Connected...\n');
+//     const collection = client.db("test").collection("devices");
+//     // perform actions on the collection object
+//     client.close();
+// });
+
+const Express = require("express");
+const BodyParser = require("body-parser");
+const MongoClient = require("mongodb").MongoClient;
+const ObjectId = require("mongodb").ObjectID;
+
+const CONNECTION_URL = "mongodb://kingarojk:@cluster0-shard-00-00-5ndv1.mongodb.net:27017,cluster0-shard-00-01-5ndv1.mongodb.net:27017,cluster0-shard-00-02-5ndv1.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true";
+const DATABASE_NAME = "Project0";
+
+var app = Express();
+
+app.use(BodyParser.json());
+app.use(BodyParser.urlencoded({ extended: true }));
+
+var database, collection;
+
+app.listen(3010, () => {
+    MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true }, (error, client) => {
+        if(error) {
+            throw error;
+        }
+        database = client.db(DATABASE_NAME);
+        collection = database.collection("people");
+        console.log("Connected to `" + DATABASE_NAME + "`!");
+    });
+});
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
