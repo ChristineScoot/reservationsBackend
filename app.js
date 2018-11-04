@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const taskController = require("./controllers/taskController");
+const objectController = require("./controllers/objectController");
 
 require("./config/db");
 const app = express();
@@ -10,15 +10,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app
-    .route("/tasks")
-    .get(taskController.listAllTasks)
-    .post(taskController.createNewTask);
+    .route("/object")
+    .get(objectController.listAllObject)
+    .post(objectController.createNewObject);
 
 app
-    .route("/tasks/:taskid")
-    .get(taskController.readTask)
-    .put(taskController.updateTask)
-    .delete(taskController.deleteTask);
+    .route("/object/:objectid")
+    .put(objectController.updateObject)
+    .delete(objectController.deleteObject);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
