@@ -1,10 +1,10 @@
 
-const Object = require("../models/object");
+const ReservationObject = require("../models/ReservationObject");
 var mongooose = require('mongoose');
 
 
-exports.listAllObject = (req, res) => {
-    Object.find({}, (err, object) => {
+exports.listAllReservationObjects = (req, res) => {
+    ReservationObject.find({}, (err, object) => {
         if (err) {
             res.status(500).send(err);
         }
@@ -12,8 +12,8 @@ exports.listAllObject = (req, res) => {
     });
 };
 
-exports.createNewObject = (req, res) => {
-    let newObject = new Object(req.body);
+exports.createNewReservationObject = ({body}, res) => {
+    let newObject = new ReservationObject(body);
     newObject.save((err, object) => {
         if (err) {
             res.status(500).send(err);
@@ -22,8 +22,8 @@ exports.createNewObject = (req, res) => {
     });
 };
 
-exports.readObject = (req, body) => {
-    Object.findById(req.params.objectid, (err, object) => {
+exports.readReservationObject = (req, body) => {
+    ReservationObject.findById(req.params.objectid, (err, object) => {
         if (err) {
             res.status(500).send(err);
         }
@@ -31,8 +31,8 @@ exports.readObject = (req, body) => {
     });
 };
 
-exports.updateObject = (req, res) => {
-    Object.findOneAndUpdate(
+exports.updateReservationObject = (req, res) => {
+    ReservationObject.findOneAndUpdate(
         { _id: req.params.objectid },
         req.body,
         { new: true },
@@ -45,11 +45,11 @@ exports.updateObject = (req, res) => {
     );
 };
 
-exports.deleteObject = (req, res) => {
-    Object.remove({_id: req.params.objectid}, (err, object) => {
+exports.deleteReservationObject = (req, res) => {
+    ReservationObject.remove({_id: req.params.objectid}, (err, object) => {
         if (err) {
             res.status(404).send(err);
         }
-        res.status(200).json({message: "Object successfully deleted"});
+        res.status(200).json({message: "ReservationObject successfully deleted"});
     });
 };

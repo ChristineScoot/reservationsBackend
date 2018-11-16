@@ -11,13 +11,13 @@ app.use(bodyParser.json());
 
 app
     .route("/object")
-    .get(objectController.listAllObject)
-    .post(objectController.createNewObject);
+    .get(objectController.listAllReservationObjects)
+    .post(objectController.createNewReservationObject);
 
 app
     .route("/object/:objectid")
-    .put(objectController.updateObject)
-    .delete(objectController.deleteObject);
+    .put(objectController.updateReservationObject)
+    .delete(objectController.deleteReservationObject);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
