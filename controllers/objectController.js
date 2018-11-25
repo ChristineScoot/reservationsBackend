@@ -1,5 +1,5 @@
 
-const ReservationObject = require("../models/ReservationObject");
+const ReservationObject = require("../models/reservationObject");
 var mongooose = require('mongoose');
 
 
