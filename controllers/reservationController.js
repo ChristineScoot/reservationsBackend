@@ -18,9 +18,10 @@ exports.createNewReservation = ({body}, res) => {
         if (err) {
             res.status(500).send(err);
         }
-        if(object.reservations[body.timeRange].person!=null){
+        console.log(object.reservations[body.timeRange].person);
+        if (object.reservations[body.timeRange].person != "303030303030303030303030") {
             //nie można rezerwować
-            res.status(500).json({message:"Cannot reserve during that time"});
+            res.status(500).json({message: "Cannot reserve during that time"});
         }
         console.log(object);
         //pobierz osobę
@@ -28,21 +29,73 @@ exports.createNewReservation = ({body}, res) => {
             if (err) {
                 res.status(500).send(err);
             }
-            if(person.canReserve){
+            if (person.canReserve) {
                 //rezerwuj!!!
-                var updatedObject=object;
-                updatedObject.reservations[body.timeRange].person=person;
-                console.log(updatedObject.reservations[body.timeRange]);
-                console.log("\n\n\n\n");
+                var updatedObject = object;
+                updatedObject.reservations[body.timeRange].person = person;//mongooose.Types.ObjectId(person._id);
+                console.log(updatedObject.reservations[body.timeRange].person.name);
+                console.log("\n\n\n");
                 console.log(mongooose.Types.ObjectId(body.objectId));
                 //zapisz w bazie
                 //TODO canReserve w personie !!!!!!!!!!! na false !!!!!!!!!
                 // ReservationObject.update({_id:body.objectId}, {reservations: updatedObject.reservations});
+                object.save(function (err, updatedObject) {
+                    if(err){
+                        console.log("ERRORRRRRRRRRRRRRRRRRRRRRRRRRRR");
+                    }else{
+                        res.send(updatedObject);
+                    }
+                })
+                // ReservationObject.findOneAndUpdate(
+                //     {_id: mongooose.Types.ObjectId(body.objectId)},
+                //     {
+                //         $set: {
+                //             reservations: {
+                //                 person: person._id,
+                //                 "$[element]": body.timeRange
+                //             }
+                //             // "reservations.$[element]": body.timeRange,
+                //             // person: person._id,
+                //             // reservations: {
+                //             //     person: person._id,
+                //             //     $position: body.timeRange
+                //             // }
+                //         }
+                //     },
+                //     {new: true}, //options
+                //     (err, object) => {
+                //         if (err) {
+                //             // res.status(404).send(err);
+                //             console.log("Reservation NOPE");
+                //         }
+                //         console.log("Reservation successfully added");
+                //         // res.status(200).json({message: "Reservation successfully deleted"});
+                //     }
+                // );
 
-ReservationObject.findOneAndUpdate({_id:mongooose.Types.ObjectId(body.objectId)}, {$set:{"reservations.$.person": body.personId}});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                // , {new: true},
+                //     (err, objectUp) => {
+                //         if (err) {
+                //             res.status(500).send(err);
+                //         }
+                //        // res.status(200).json(objectUp);
+                //     });
+                // ReservationObject.findOneAndUpdate({_id: mongooose.Types.ObjectId(body.objectId)}, {$set: {"reservations.$.person": body.personId}});
                 // ReservationObject.findOneAndUpdate(mongooose.Types.ObjectId(body.objectId), updatedObject);
-
-
 
 
                 // ReservationObject.findOneAndUpdate({ _id: req.params.objectid }
@@ -61,11 +114,7 @@ ReservationObject.findOneAndUpdate({_id:mongooose.Types.ObjectId(body.objectId)}
                 // );
 
 
-
-
-
-
-                res.status(200).json({message: "Reservation successfully added"});
+               // res.status(200).json({message: "Reservation successfully added"});
             }
             // console.log(person);
         });
