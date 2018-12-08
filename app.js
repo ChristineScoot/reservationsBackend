@@ -18,6 +18,7 @@ app
     .post(objectController.createNewReservationObject);
 app
     .route("/object/:objectid")
+    .get(objectController.readReservationObject) //FIXME ReferenceError: res is not defined (controllers\objectController.js:30:9)
     .put(objectController.updateReservationObject)
     .delete(objectController.deleteReservationObject);
 
@@ -28,13 +29,13 @@ app
     .post(personController.createNewPerson);
 app
     .route("/person/:personid")
-    .put(personController.updatePerson)
-    .delete(personController.deletePerson);
+    .put(personController.updatePerson) //FIXME zwraca null i nie updatuje ????chyba nie znajduje w bazie????
+    .delete(personController.deletePerson); //FIXME pisze że usuwa, jak się można domyślić nie usuwa, WTF?!?! :P
 
 //RESERVATION
 app
     .route("/reservation")
-    .post(reservationController.createNewReservation);
+    .post(reservationController.createNewReservation); //FIXME push()??
 
 
 app.listen(port, () => {

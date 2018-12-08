@@ -32,7 +32,7 @@ exports.createNewPerson = ({body}, res) => {
 
 exports.updatePerson = (req, res) => {
     Person.findOneAndUpdate(
-        { _id: req.params.objectid },
+        { _id:req.params.objectid },
         req.body,
         { new: true },
         (err, object) => {
@@ -44,9 +44,9 @@ exports.updatePerson = (req, res) => {
     );
 };
 
-//FIXME coś nie działa!!!!!!!
+//TODO sprawdzić czy działa!!!!!!!
 exports.deletePerson = (req, res) => {
-    Person.deleteOne({_id: req.params.objectid}, (err, object) => {
+    Person.deleteOne({_id: mongooose.Types.ObjectId(req.params.objectid)}, (err, object) => {
         if (err) {
             res.status(404).send(err);
         }
