@@ -22,7 +22,7 @@ exports.createNewReservationObject = ({body}, res) => {
     });
 };
 
-exports.readReservationObject = (req, body) => {
+exports.readReservationObject = (req, res) => {
     ReservationObject.findById(mongooose.Types.ObjectId(req.params.objectid), (err, object) => {
         if (err) {
             res.status(500).send(err);
