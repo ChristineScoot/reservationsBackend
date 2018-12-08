@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const Reservations = require('./modelReservations').reservationsSchema
+const Reservations = require('./modelReservations').reservationsSchema;
+const Person = require('./person').PersonSchema;
 var mongooose = require('mongoose');
 
 const ReservationObjectSchema = new Schema({

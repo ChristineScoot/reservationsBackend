@@ -32,9 +32,9 @@ exports.createNewPerson = ({body}, res) => {
 
 exports.updatePerson = (req, res) => {
     Person.findOneAndUpdate(
-        { _id:req.params.objectid },
+        {_id: req.params.objectid},
         req.body,
-        { new: true },
+        {new: true},
         (err, object) => {
             if (err) {
                 res.status(500).send(err);
@@ -44,7 +44,6 @@ exports.updatePerson = (req, res) => {
     );
 };
 
-//TODO sprawdzić czy działa!!!!!!!
 exports.deletePerson = (req, res) => {
     Person.deleteOne({_id: mongooose.Types.ObjectId(req.params.objectid)}, (err, object) => {
         if (err) {

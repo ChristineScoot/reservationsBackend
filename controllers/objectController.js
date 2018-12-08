@@ -1,4 +1,3 @@
-
 const ReservationObject = require("../models/reservationObject");
 var mongooose = require('mongoose');
 
@@ -33,9 +32,9 @@ exports.readReservationObject = (req, res) => {
 
 exports.updateReservationObject = (req, res) => {
     ReservationObject.findOneAndUpdate(
-        { _id: req.params.objectid },
+        {_id: req.params.objectid},
         req.body,
-        { new: true },
+        {new: true},
         (err, object) => {
             if (err) {
                 res.status(500).send(err);

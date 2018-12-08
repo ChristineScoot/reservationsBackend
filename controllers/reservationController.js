@@ -19,10 +19,11 @@ exports.createNewReservation = ({body}, res) => {
             res.status(500).send(err);
         }
         console.log(object.reservations[body.timeRange].person);
-        if (object.reservations[body.timeRange].person != "303030303030303030303030") {
-            //nie można rezerwować
-            res.status(500).json({message: "Cannot reserve during that time"});
-        }
+        //TODO sprawdzanie czy zarezerwowane (może ustawić defaultowo null???)
+        // if (object.reservations[body.timeRange].person != "303030303030303030303030") {
+        //     //nie można rezerwować
+        //     res.status(500).json({message: "Cannot reserve during that time"});
+        // }
         console.log(object);
         //pobierz osobę
         Person.findById(mongooose.Types.ObjectId(body.personId), (err, person) => {
@@ -32,20 +33,31 @@ exports.createNewReservation = ({body}, res) => {
             if (person.canReserve) {
                 //rezerwuj!!!
                 var updatedObject = object;
-                updatedObject.reservations[body.timeRange].person = person;//mongooose.Types.ObjectId(person._id);
+                // updatedObject.reservations[body.timeRange].person = person;//mongooose.Types.ObjectId(person._id);
+                updatedObject.reservations[body.timeRange].person = mongooose.Types.ObjectId(person._id);
+
                 console.log(updatedObject.reservations[body.timeRange].person.name);
                 console.log("\n\n\n");
                 console.log(mongooose.Types.ObjectId(body.objectId));
                 //zapisz w bazie
                 //TODO canReserve w personie !!!!!!!!!!! na false !!!!!!!!!
+//FIXME odtąd nie działa -------------------------------------------------------------------
                 // ReservationObject.update({_id:body.objectId}, {reservations: updatedObject.reservations});
-                object.save(function (err, updatedObject) {
-                    if(err){
-                        console.log("ERRORRRRRRRRRRRRRRRRRRRRRRRRRRR");
-                    }else{
-                        res.send(updatedObject);
-                    }
-                })
+                // object.save(function (err, updatedObject) {
+                //     if(err){
+                //         console.log("ERRORRRRRRRRRRRRRRRRRRRRRRRRRRR");
+                //     }else{
+                //         res.send(updatedObject);
+                //     }
+                // })
+                ReservationObject(updatedObject).save()
+                    .then(item => {
+                        console.log("DB Item saved --->", item);
+                        res.status(200).send("item saved to database");})
+                    .catch(err => {
+                    // res.status(400).send("unable to save to database");
+                    res.status(200).json(err); //TODO "ReservationObject validation failed: reservations: Cast to Array failed for value
+                });
                 // ReservationObject.findOneAndUpdate(
                 //     {_id: mongooose.Types.ObjectId(body.objectId)},
                 //     {
@@ -72,19 +84,6 @@ exports.createNewReservation = ({body}, res) => {
                 //         // res.status(200).json({message: "Reservation successfully deleted"});
                 //     }
                 // );
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 // , {new: true},
@@ -114,7 +113,7 @@ exports.createNewReservation = ({body}, res) => {
                 // );
 
 
-               // res.status(200).json({message: "Reservation successfully added"});
+                // res.status(200).json({message: "Reservation successfully added"});
             }
             // console.log(person);
         });
