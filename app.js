@@ -18,7 +18,7 @@ app
     .post(objectController.createNewReservationObject);
 app
     .route("/object/:objectid")
-    .get(objectController.readReservationObject) //FIXME ReferenceError: res is not defined (controllers\objectController.js:30:9)
+    .get(objectController.readReservationObject) //FIXME null
     .put(objectController.updateReservationObject)
     .delete(objectController.deleteReservationObject);
 
