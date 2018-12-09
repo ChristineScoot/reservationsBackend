@@ -3,11 +3,11 @@ var mongooose = require('mongoose');
 
 
 exports.listAllPeople = (req, res) => {
-    Person.find({}, (err, object) => {
+    Person.find({}, (err, person) => {
         if (err) {
             res.status(500).send(err);
         }
-        res.status(200).json(object);
+        res.status(200).json(person);
     });
 };
 
@@ -32,20 +32,20 @@ exports.createNewPerson = ({body}, res) => {
 
 exports.updatePerson = (req, res) => {
     Person.findOneAndUpdate(
-        {_id: req.params.objectid},
+        {_id:  mongooose.Types.ObjectId(req.params.personid)},
         req.body,
         {new: true},
-        (err, object) => {
+        (err, person) => {
             if (err) {
                 res.status(500).send(err);
             }
-            res.status(200).json(object);
+            res.status(200).json(person);
         }
     );
 };
 
 exports.deletePerson = (req, res) => {
-    Person.deleteOne({_id: mongooose.Types.ObjectId(req.params.objectid)}, (err, object) => {
+    Person.deleteOne({_id: mongooose.Types.ObjectId(req.params.personid)}, (err, person) => {
         if (err) {
             res.status(404).send(err);
         }

@@ -18,7 +18,7 @@ app
     .post(objectController.createNewReservationObject);
 app
     .route("/object/:objectid")
-    .get(objectController.readReservationObject) //FIXME null
+    .get(objectController.readReservationObject)
     .put(objectController.updateReservationObject)
     .delete(objectController.deleteReservationObject);
 
