@@ -20,4 +20,4 @@ mongoose.connect(dbURI, options).then(
 
 // require any modelsvnbm,
 
-require("../models/ReservationObject");
+require("../models/reservationObject");

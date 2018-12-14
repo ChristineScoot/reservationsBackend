@@ -1,5 +1,4 @@
-
-const ReservationObject = require("../models/ReservationObject");
+const ReservationObject = require("../models/reservationObject");
 var mongooose = require('mongoose');
 
 
@@ -22,8 +21,8 @@ exports.createNewReservationObject = ({body}, res) => {
     });
 };
 
-exports.readReservationObject = (req, body) => {
-    ReservationObject.findById(req.params.objectid, (err, object) => {
+exports.readReservationObject = (req, res) => {
+    ReservationObject.findById(mongooose.Types.ObjectId(req.params.objectid), (err, object) => {
         if (err) {
             res.status(500).send(err);
         }
@@ -33,9 +32,9 @@ exports.readReservationObject = (req, body) => {
 
 exports.updateReservationObject = (req, res) => {
     ReservationObject.findOneAndUpdate(
-        { _id: req.params.objectid },
+        {_id: req.params.objectid},
         req.body,
-        { new: true },
+        {new: true},
         (err, object) => {
             if (err) {
                 res.status(500).send(err);
