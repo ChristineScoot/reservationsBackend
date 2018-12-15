@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const objectController = require("./controllers/objectController");
 const userController = require("./controllers/userController");
 const reservationController = require("./controllers/reservationController");
+let checkAuth = require("./middleware/check-auth");
 
 require("./config/db");
 const app = express();
@@ -31,11 +32,17 @@ app
     .route("/user/:id")
     .put(userController.updateUser)
     .delete(userController.deleteUser);
+app
+    .route("/user/register")
+    .post(userController.user_signup);
+app
+    .route("/user/login")
+    .post(userController.user_login);
 
 //RESERVATION
 app
     .route("/reservation")
-    .post(reservationController.createNewReservation)
+    .post(checkAuth, reservationController.createNewReservation)
 
 app
     .route("/reservation/:objectId/:reservationId")

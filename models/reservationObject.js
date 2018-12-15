@@ -13,6 +13,7 @@ const ReservationObjectSchema = new Schema({
         type: [Reservation],
         required: false
     }
-});
+})
+
 
 module.exports = mongoose.model("ReservationObject", ReservationObjectSchema);
