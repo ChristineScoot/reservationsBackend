@@ -35,7 +35,11 @@ app
 //RESERVATION
 app
     .route("/reservation")
-    .post(reservationController.createNewReservation); //FIXME push()??
+    .post(reservationController.createNewReservation)
+
+app
+    .route("/reservation/:objectId/:reservationId")
+    .delete(reservationController.deleteReservation);
 
 
 app.listen(port, () => {

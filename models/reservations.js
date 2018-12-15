@@ -4,7 +4,7 @@ const { Schema } = require('mongoose')
 const ReservationSchema = new Schema({
     user:{
         type: Schema.ObjectId,
-        ref: 'User',
+        ref: 'user',
         required: true,
     },
     from:{
