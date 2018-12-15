@@ -1,137 +1,54 @@
 const ReservationObject = require("../models/reservationObject");
-const Person = require("../models/person");
-var mongooose = require('mongoose');
+const User = require("../models/user");
+var mongoose = require('mongoose');
+const ObjectId = require('mongoose').Types.ObjectId;
 
+exports.createNewReservation = async (req, res, next) => {
+    const {from, to} = req.body
+    const user = await User.findById(req.body.userId).exec()
+    let object = await ReservationObject.findById(req.body.objectId).exec()
+    const reservationId = ObjectId()
 
-// exports.listAllReservationObjects = (req, res) => {
-//     ReservationObject.find({}, (err, object) => {
-//         if (err) {
-//             res.status(500).send(err);
-//         }
-//         res.status(200).json(object);
-//     });
-// };
+    // Sprawdz daty
+    const fromDate = new Date(from)
+    const toDate = new Date(to)
 
-exports.createNewReservation = ({body}, res) => {
-    //pobierz obiekt
-    ReservationObject.findById(mongooose.Types.ObjectId(body.objectId), (err, object) => {
-        if (err) {
-            res.status(500).send(err);
-        }
-        console.log(object.reservations[body.timeRange].person);
-        //TODO sprawdzanie czy zarezerwowane (może ustawić defaultowo null???)
-        // if (object.reservations[body.timeRange].person != "303030303030303030303030") {
-        //     //nie można rezerwować
-        //     res.status(500).json({message: "Cannot reserve during that time"});
-        // }
-        console.log(object);
-        //pobierz osobę
-        Person.findById(mongooose.Types.ObjectId(body.personId), (err, person) => {
-            if (err) {
-                res.status(500).send(err);
+    if(toDate.getTime() <= fromDate.getTime())
+        return res.status(400).json({errors: ['The end date must be greater than or equal to the rental date.']});
+
+    const now = new Date()
+    if(fromDate.getTime() <= now.getTime())
+        return res.status(400).json({errors: ['It is not possible to rent a car from the past']});
+
+            // for(let i =0; i<object.reservations.length; i++){
+            //     if((object.reservations[i].from<=from && object.reservations[i].to<= from) ||
+            //         (object.reservations[i].from<=to && object.reservations[i].to<= to ||
+            //             (object.reservations[i].from >= from && object.reservations[i].to <= to ))){
+            //         return res.status(409).json({
+            //             message: "Reservation is impossible.",
+            //             ReservationObject: object
+            //         });
+            //     }
+            // }
+            try {
+                object.reservations.push({
+                    _id: reservationId,
+                    user: user._id,
+                    from,
+                    to
+                })
+            }catch(e){
+                return res.status(400).end();
             }
-            if (person.canReserve) {
-                //rezerwuj!!!
-                var updatedObject = object;
-                // updatedObject.reservations[body.timeRange].person = person;//mongooose.Types.ObjectId(person._id);
-                updatedObject.reservations[body.timeRange].person = mongooose.Types.ObjectId(person._id);
 
-                console.log(updatedObject.reservations[body.timeRange].person.name);
-                console.log("\n\n\n");
-                console.log(mongooose.Types.ObjectId(body.objectId));
-                //zapisz w bazie
-                //TODO canReserve w personie !!!!!!!!!!! na false !!!!!!!!!
-//FIXME odtąd nie działa -------------------------------------------------------------------
-                // ReservationObject.update({_id:body.objectId}, {reservations: updatedObject.reservations});
-                // object.save(function (err, updatedObject) {
-                //     if(err){
-                //         console.log("ERRORRRRRRRRRRRRRRRRRRRRRRRRRRR");
-                //     }else{
-                //         res.send(updatedObject);
-                //     }
-                // })
-                ReservationObject(updatedObject).save()
-                    .then(item => {
-                        console.log("DB Item saved --->", item);
-                        res.status(200).send("item saved to database");})
-                    .catch(err => {
-                    // res.status(400).send("unable to save to database");
-                    res.status(200).json(err); //TODO "ReservationObject validation failed: reservations: Cast to Array failed for value
-                });
-                // ReservationObject.findOneAndUpdate(
-                //     {_id: mongooose.Types.ObjectId(body.objectId)},
-                //     {
-                //         $set: {
-                //             reservations: {
-                //                 person: person._id,
-                //                 "$[element]": body.timeRange
-                //             }
-                //             // "reservations.$[element]": body.timeRange,
-                //             // person: person._id,
-                //             // reservations: {
-                //             //     person: person._id,
-                //             //     $position: body.timeRange
-                //             // }
-                //         }
-                //     },
-                //     {new: true}, //options
-                //     (err, object) => {
-                //         if (err) {
-                //             // res.status(404).send(err);
-                //             console.log("Reservation NOPE");
-                //         }
-                //         console.log("Reservation successfully added");
-                //         // res.status(200).json({message: "Reservation successfully deleted"});
-                //     }
-                // );
+    user.reservations.push(reservationId)
 
+    {
+        await user.save()
+        await object.save()
+        res.status(201).json(object);
+    }
 
-                // , {new: true},
-                //     (err, objectUp) => {
-                //         if (err) {
-                //             res.status(500).send(err);
-                //         }
-                //        // res.status(200).json(objectUp);
-                //     });
-                // ReservationObject.findOneAndUpdate({_id: mongooose.Types.ObjectId(body.objectId)}, {$set: {"reservations.$.person": body.personId}});
-                // ReservationObject.findOneAndUpdate(mongooose.Types.ObjectId(body.objectId), updatedObject);
-
-
-                // ReservationObject.findOneAndUpdate({ _id: req.params.objectid }
-                //
-                //
-                // ReservationObject.findOneAndUpdate(
-                //     { _id: req.params.objectid },
-                //     req.body,
-                //     { new: true },
-                //     (err, object) => {
-                //         if (err) {
-                //             res.status(500).send(err);
-                //         }
-                //         res.status(200).json(object);
-                //     }
-                // );
-
-
-                // res.status(200).json({message: "Reservation successfully added"});
-            }
-            // console.log(person);
-        });
-    });
-    //var reservationObject = ReservationObject.findById(mongooose.Types.ObjectId(body.objectid));
-    // var person = Person.findById(mongooose.Types.ObjectId(body.personid));
-    // console.log("Object= " + reservationObject.objectName);
-    // console.log("Person= " + person.objectName);
-    // res.status(201);
-
-
-    // let newObject = new ReservationObject(body);
-    // newObject.save((err, object) => {
-    //     if (err) {
-    //         res.status(500).send(err);
-    //     }
-    //     res.status(201).json(object);
-    // });
 };
 
 // exports.readReservationObject = (req, body) => {

@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const objectController = require("./controllers/objectController");
-const personController = require("./controllers/personController");
+const userController = require("./controllers/userController");
 const reservationController = require("./controllers/reservationController");
 
 require("./config/db");
@@ -22,15 +22,15 @@ app
     .put(objectController.updateReservationObject)
     .delete(objectController.deleteReservationObject);
 
-//PERSON
+// //PERSON
 app
-    .route("/person")
-    .get(personController.listAllPeople)
-    .post(personController.createNewPerson);
+    .route("/user")
+    .get(userController.listAllPeople)
+    .post(userController.createNewUser);
 app
-    .route("/person/:personid")
-    .put(personController.updatePerson) //FIXME zwraca null i nie updatuje ????chyba nie znajduje w bazie????
-    .delete(personController.deletePerson); //FIXME pisze że usuwa, jak się można domyślić nie usuwa, WTF?!?! :P
+    .route("/user/:id")
+    .put(userController.updateUser)
+    .delete(userController.deleteUser);
 
 //RESERVATION
 app

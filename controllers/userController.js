@@ -1,9 +1,9 @@
-const Person = require("../models/person");
-var mongooose = require('mongoose');
+const User = require("../models/user");
+var mongoose = require('mongoose');
 
 
 exports.listAllPeople = (req, res) => {
-    Person.find({}, (err, person) => {
+    User.find({}, (err, person) => {
         if (err) {
             res.status(500).send(err);
         }
@@ -11,8 +11,8 @@ exports.listAllPeople = (req, res) => {
     });
 };
 
-exports.createNewPerson = ({body}, res) => {
-    let newObject = new Person(body);
+exports.createNewUser = ({body}, res) => {
+    let newObject = new User(body);
     newObject.save((err, object) => {
         if (err) {
             res.status(500).send(err);
@@ -30,9 +30,9 @@ exports.createNewPerson = ({body}, res) => {
 //     });
 // };
 
-exports.updatePerson = (req, res) => {
-    Person.findOneAndUpdate(
-        {_id:  mongooose.Types.ObjectId(req.params.personid)},
+exports.updateUser = (req, res) => {
+    User.findOneAndUpdate(
+        {_id:  mongoose.Types.ObjectId(req.params.id)},
         req.body,
         {new: true},
         (err, person) => {
@@ -44,8 +44,8 @@ exports.updatePerson = (req, res) => {
     );
 };
 
-exports.deletePerson = (req, res) => {
-    Person.deleteOne({_id: mongooose.Types.ObjectId(req.params.personid)}, (err, person) => {
+exports.deleteUser = (req, res) => {
+    User.deleteOne({_id: mongoose.Types.ObjectId(req.params.id)}, (err, user) => {
         if (err) {
             res.status(404).send(err);
         }
