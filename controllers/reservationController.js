@@ -5,7 +5,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.createNewReservation = async (req, res, next) => {
     const {from, to} = req.body
-    const user = req.userData
+    let user = await User.findById(req.userData.userId).exec()
     let object = await ReservationObject.findById(req.body.objectId).exec()
     const reservationId = ObjectId()
 
@@ -75,7 +75,7 @@ exports.createNewReservation = async (req, res, next) => {
 //     );
 // };
 //
-exports.deleteReservation = async (req, res) => {
+exports.deleteReservation = async (req, res) => {//usuwa objekt ktory zostałoddany jako pierwszy???
     const {objectId, reservationId} = req.params;
 
     let object = await ReservationObject.findOne({_id : ObjectId(objectId)}, {reservations: {$elemMatch: {_id: ObjectId(reservationId)}}}).exec()

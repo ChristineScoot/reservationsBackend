@@ -52,3 +52,9 @@ app
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
+
+function stop() {
+    server.close()
+}
+module.exports = app
+module.exports.stop = stop
