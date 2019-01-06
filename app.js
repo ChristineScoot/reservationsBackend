@@ -51,7 +51,7 @@ app
 //MAIL WITH flaws-zglaszanie usterek
 app
     .route("/flaws")
-    .post(objectController.reportFault);
+    .post(checkAuth, objectController.reportFault);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

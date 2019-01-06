@@ -70,19 +70,18 @@ exports.reportFault = (req, res) => {
         }
     }));
     var mailOptions = {
-        from: 'Name <emailsenderii123@gmail.com>',//sender email
+        from: 'User <Jakis mail @mamamama.pl>',//sender email
         to: 'emailsenderii123@gmail.com',
         subject: 'New fault report',
         text: req.body.faultDescription
     };
-    transporter.sendMail(mailOptions, function(err, res){
+    transporter.sendMail(mailOptions, function(err, ress){
         if(err){
-            // res.send(err);
-            console.log("TEN ERROR----------------------------------")
-            console.log(err)
+            console.log(err);
+            res.status(404).send(err)
         }else{
-            // res.json({message: "Fault reported"});
             console.log("wyslano")
+            res.status(200).json({message: "Fault reported successfully"})
         }
     })
 };
