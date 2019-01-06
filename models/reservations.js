@@ -9,7 +9,7 @@ const ReservationSchema = new Schema({
     },
     from:{
         type: Date,
-        default: Date.now
+        default: Date.now()
     },
     to:{
         type: Date,

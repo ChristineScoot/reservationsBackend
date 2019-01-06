@@ -19,5 +19,5 @@ mongoose.connect(dbURI, options).then(
 );
 
 // require any modelsvnbm,
-
+module.exports = mongoose
 require("../models/reservationObject");

@@ -4,38 +4,36 @@ var mongoose = require('mongoose');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 exports.createNewReservation = async (req, res, next) => {
-    const {from, to} = req.body
+    const {from, to} = req.body;
     let user = await User.findById(req.userData.userId).exec()
     let object = await ReservationObject.findById(req.body.objectId).exec()
     const reservationId = ObjectId()
 
     // Sprawdz daty
-    const fromDate = new Date(from)
-    const toDate = new Date(to)
+    const fromDate = new Date(req.body.from)
+    const toDate = new Date(req.body.to)
 
-    if(toDate.getTime() <= fromDate.getTime())
-        return res.status(400).json({errors: ['The end date must be greater than or equal to the rental date.']});
+   if(toDate.getTime() <= fromDate.getTime())
+       return res.status(400).json({errors: ['The end date must be greater than or equal to the rental date.']});
 
     const now = new Date()
-    if(fromDate.getTime() <= now.getTime())
-        return res.status(400).json({errors: ['It is not possible to rent a car from the past']});
+   if(fromDate.getTime() <= now.getTime())
+       return res.status(400).json({errors: ['It is not possible to rent a car from the past']});
 
-            // for(let i =0; i<object.reservations.length; i++){//do poprawy
-            //     if((object.reservations[i].from<=from && object.reservations[i].to<= from) ||
-            //         (object.reservations[i].from<=to && object.reservations[i].to<= to ||
-            //             (object.reservations[i].from >= from && object.reservations[i].to <= to ))){
-            //         return res.status(409).json({
-            //             message: "Reservation is impossible.",
-            //             ReservationObject: object
-            //         });
-            //     }
-            // }
+   for(let i =0; i<object.reservations.length; i++){
+                if(object.reservations[i].from<=req.body.from && req.body.from < object.reservations[i].to){
+                    return res.status(409).json({
+                        message: "Reservation is impossible.",
+                        ReservationObject: object
+                    });
+                }
+            }
             try {
                 object.reservations.push({
                     _id: reservationId,
                     user: user._id,
-                    from,
-                    to
+                    from: from,
+                    to: to
                 })
             }catch(e){
                 return res.status(400).end();
