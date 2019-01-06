@@ -48,6 +48,10 @@ app
     .route("/reservation/:objectId/:reservationId")
     .delete(reservationController.deleteReservation);
 
+//MAIL WITH flaws-zglaszanie usterek
+app
+    .route("/flaws")
+    .post(objectController.reportFault);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
