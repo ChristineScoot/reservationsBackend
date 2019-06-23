@@ -12,6 +12,18 @@ const port = process.env.PORT || 3301;
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+app.use(function (req,res,next) {
+    res.header('Access-Control-Allow-Origin',"*");
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+    next();
+});
+
+app.get('*',function(req,res,next){
+    res.locals.user = req.user || null;
+    next();
+});
+
 //RESERVATION OBJECT
 app
     .route("/object")
@@ -25,8 +37,11 @@ app
 
 // //PERSON
 app
-    .route("/user")
+    .route("/users")
     .get(userController.listAllPeople)
+app
+    .route("/user")
+    .get(userController.listUserReservations)
     .post(userController.createNewUser);
 app
     .route("/user/:id")
