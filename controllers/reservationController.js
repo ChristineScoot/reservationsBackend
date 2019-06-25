@@ -104,7 +104,7 @@ exports.createNewReservation = async (req, res, next) => {
 
     for(let i =0; i<object.reservations.length; i++){
         if(object.reservations[i].from<=req.body.from && req.body.from < object.reservations[i].to){
-            return res.status(409).json({
+            return res.status(400).json({
                 message: "Reservation is impossible.",
                 ReservationObject: object
             });
